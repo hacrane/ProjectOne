@@ -1,0 +1,35 @@
+public class TransactionExtension {
+    //For use in TransactionClone.vfp
+	private ApexPages.StandardController ctrl;
+    public Transaction__c newTrans{
+        get;
+        set;
+    }
+    public TransactionExtension(ApexPages.StandardController stdCtrl){
+        ctrl=stdCtrl;
+        //Get all the other fields
+        String[] fields= new String[]{'Name', 'RecordTypeId', 'Category__c','Type__c', 'Title__c', 'Description__c', 'CardTail__c', 'TransferType__c','Value__c', 'date__c', 'AccountNumber__c'};
+        ctrl.addFields(fields);
+        Transaction__c oldTrans = (Transaction__c) ctrl.getRecord();
+        newTrans = oldTrans.clone(false,true,false,false);
+        //Just to make sure, Type__c was give errors.
+        newTrans.Type__c = oldTrans.Type__c;
+    }
+    
+    public PageReference cloneTrans(){
+        String url='/';
+        try{
+            insert newTrans;
+            url += newTrans.id;
+           	ApexPages.Message msg = new ApexPages.Message(ApexPages.Severity.CONFIRM,'Clone completed.');
+			ApexPages.addMessage(msg);  
+            return new PageReference(url);
+        }
+        catch(DMLException e){
+            ApexPages.Message msg = new ApexPages.Message(ApexPages.Severity.ERROR,'Clone failed: ' + e.getMessage());
+       		ApexPages.addMessage(msg);
+            return null;
+        }
+        
+    }
+}
