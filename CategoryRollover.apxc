@@ -1,0 +1,19 @@
+public without sharing class CategoryRollover {
+	
+    public static void rollover(){
+        Category__c[] oldCats = [SELECT Id, MonthlyLimit__c, Budget__c FROM Category__c WHERE Archived__c=false];
+        Category__c[] newCats = new Category__c[]{};
+            for(Category__c cat : oldCats){
+                newCats.add(archive(cat));
+            }
+        update oldCats;
+        insert newCats;
+    }
+    
+    public static Category__c archive(Category__c cat){
+        Category__c result = cat.clone(false,true,false,false);
+        //result.OwnerId = cat.OwnerId;
+        cat.Archived__c=true;
+        return result;
+    }
+}
