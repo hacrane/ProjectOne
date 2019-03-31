@@ -1,0 +1,14 @@
+<apex:page standardController="Transaction__c" extensions="TransactionExtension">
+    <apex:form >
+        <apex:pageBlock title="Clone Transaction">
+            <apex:pageMessages />
+            <apex:inputField value="{!newTrans.Value__c}" />
+            <apex:inputField value="{!newTrans.Date__c}"/>
+            <apex:inputField value="{!newTrans.Category__c}" />
+            <apex:pageblockbuttons location="bottom">
+                <apex:commandButton action="{!cloneTrans}" value="Clone" />
+                <apex:commandButton action="{!cancel}" value="Cancel"/>
+            </apex:pageblockbuttons>                     
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
